@@ -23,6 +23,13 @@ const JobSchema = new mongoose.Schema({
     type: String,
     required: [true, "Address is required"],
   },
+  location : {
+    type: {
+      type: {
+        enum: ['Point']
+      }
+    }
+  },
   company: {
     type: String,
     required: [true, "Company is required"],
