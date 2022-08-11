@@ -1,0 +1,21 @@
+{
+  "name": "jobee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "prod": "SET NODE_ENV = PRODUCTION & nodemon app.js"
+  },
+  "keywords": [],
+  "author": "Promod Tamang",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.5.2",
+    "slugify": "^1.6.5",
+    "validator": "^13.7.0"
+  }
+}
