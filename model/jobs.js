@@ -121,5 +121,5 @@ JobSchema.pre("save", async function (next) {
     country: loc[0].countryCode,
   };
 });
-
+JobSchema.index({ title: "text" });
 module.exports = mongoose.model("Job", JobSchema);
