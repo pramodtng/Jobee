@@ -14,9 +14,7 @@ router.route("/jobs").get(getJobs);
 router.route("/job/:id/:slug").get(getJobById);
 router.route("/new-job").post(createJobs);
 router.route("/jobs-in-radius/:zipcode/:distance").get(jobInRadius);
-router.route("/job/:id").put(updateJob).delete(deleteJob)
+router.route("/job/:id").put(updateJob).delete(deleteJob);
 router.route("/stats/:topic").get(getStats);
-
-
 
 module.exports = router;

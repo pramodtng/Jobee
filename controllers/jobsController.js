@@ -1,5 +1,6 @@
 const Job = require("../model/jobs");
 const geocoder = require("../utils/geocoder");
+const ErrorHandlers = require("../utils/errorHandlers");
 
 //Get all jobs
 exports.getJobs = async (req, res, next) => {
