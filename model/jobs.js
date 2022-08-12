@@ -10,7 +10,9 @@ const JobSchema = new mongoose.Schema({
     trim: true,
     maxlength: [50, "Title must be less than 50 characters"],
   },
+  
   slug: String,
+
   description: {
     type: String,
     required: [true, "Description is required"],

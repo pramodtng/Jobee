@@ -1,6 +1,7 @@
 const Job = require("../model/jobs");
 const geocoder = require("../utils/geocoder");
 
+//Get all jobs
 exports.getJobs = async (req, res, next) => {
   const data = await Job.find();
   return res.status(200).json({
@@ -11,63 +12,7 @@ exports.getJobs = async (req, res, next) => {
   });
 };
 
-// exports.createJobs = async (req, res, next) => {
-//   const { title, description,slug, email, address, company, industry, jobType, minEducation, positions, experience, salary, location } = req.body;
-//   console.log(req.body)
-//   Job.findOne({ title: title }).then((docs) => {
-//     if(docs) {
-//       res.status(200).json({
-//         success: false,
-//         message: "Job already exists",
-//       });
-//     }
-//     let newJob = new Job({
-//       title: title,
-//       description: description,
-//       slug: slug,
-//       email: email,
-//       address: address,
-//       company: company,
-//       industry: industry,
-//       jobType: jobType,
-//       location: location,
-//       minEducation: minEducation,
-//       positions: positions,
-//       experience: experience,
-//       salary: salary
-//     })
-//     newJob.save().then((docs) => {
-//       res.status(200).json({
-//         message: "New job is posted successfully.",
-//         data: docs,
-//       })
-//     })
-//     .catch((err) => {
-//       res.json({
-//         message: err.message
-//       })
-//     })
-//   }).catch((err) => {
-//     res.json((err) => {
-//       res.json({
-//         message: err.message
-//       })
-//     })
-//   })
-// };
-
-// exports.createJobs = async (req, res, next) => {
-//   const docs = await Job.create(req.body);
-//   res.status(200).json({
-//     message: "New job is posted successfully.",
-//     data: docs,
-//     success: true,
-//   });
-// }
-
-//create a new job
-
-
+//Create a job
 exports.createJobs = async (req, res, next) => {
   const docs = await Job.create(req.body);
   return res.status(200).json({
@@ -116,10 +61,11 @@ exports.updateJob = async (req, res, next) => {
   });
 };
 
+//Delete a job
 exports.deleteJob = async (req, res, next) => {
   let job = await Job.findById(req.params.id);
   if (!job) {
-    return res.status(404).json({ 
+    return res.status(404).json({
       message: "Job not found",
       success: false,
     });
@@ -129,4 +75,23 @@ exports.deleteJob = async (req, res, next) => {
     message: "Job deleted successfully",
     success: true,
   });
-}
+};
+
+//Get a job by id and slug
+exports.getJobById = async (req, res, next) => {
+  const job = await Job.findOne({
+    $and: [{ _id: req.params.id }, { slug: req.params.slug }],
+  });
+
+  if (!job || job.length === 0) {
+    return res.status(404).json({
+      message: "Job not found",
+      success: false,
+    });
+  }
+  return res.status(200).json({
+    message: "Job fetched successfully",
+    success: true,
+    data: job,
+  });
+};
