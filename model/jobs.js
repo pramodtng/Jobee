@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const slugify = require("slugify");
+const geocoder = require("../utils/geocoder");
 
 const JobSchema = new mongoose.Schema({
   title: {
@@ -23,21 +24,20 @@ const JobSchema = new mongoose.Schema({
     type: String,
     required: [true, "Address is required"],
   },
-  location : {
+  location: {
     type: {
-      type: {
-        enum: ['Point']
-      },
-      coordinates: {
-        type: String,
-        index: '2dsphere'
-      },
-      formattedAddress: String,
-      city: String,
-      state: String,
-      zipcode: String,
-      country: String,
-    }
+      type: String,
+      enum: ["Point"],
+    },
+    coordinates: {
+      type: [Number],
+      index: "2dsphere",
+    },
+    formattedAddress: String,
+    city: String,
+    state: String,
+    zipcode: String,
+    country: String,
   },
   company: {
     type: String,
@@ -102,8 +102,22 @@ const JobSchema = new mongoose.Schema({
 });
 
 JobSchema.pre("save", function (next) {
-    this.slug = slugify(this.title, { lower: true });
-    next();
-})
+  this.slug = slugify(this.title, { lower: true });
+  next();
+});
+
+JobSchema.pre("save", async function (next) {
+  const loc = await geocoder.geocode(this.address);
+
+  this.location = {
+    type: "Point",
+    coordinates: [loc[0].longitude, loc[0].latitude],
+    formattedAddress: loc[0].formattedAddress,
+    city: loc[0].city,
+    state: loc[0].stateCode,
+    zipcode: loc[0].zipcode,
+    country: loc[0].countryCode,
+  };
+});
 
 module.exports = mongoose.model("Job", JobSchema);
