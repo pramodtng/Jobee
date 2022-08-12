@@ -27,7 +27,16 @@ const JobSchema = new mongoose.Schema({
     type: {
       type: {
         enum: ['Point']
-      }
+      },
+      coordinates: {
+        type: String,
+        index: '2dsphere'
+      },
+      formattedAddress: String,
+      city: String,
+      state: String,
+      zipcode: String,
+      country: String,
     }
   },
   company: {
