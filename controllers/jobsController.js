@@ -1,10 +1,9 @@
-const jobs = require("../model/jobs");
 const Job = require("../model/jobs");
 const geocoder = require("../utils/geocoder");
 
 exports.getJobs = async (req, res, next) => {
   const data = await Job.find();
-  res.status(200).json({
+  return res.status(200).json({
     message: "Jobs fetched successfully",
     results: data.length,
     sucess: true,
@@ -67,9 +66,11 @@ exports.getJobs = async (req, res, next) => {
 // }
 
 //create a new job
+
+
 exports.createJobs = async (req, res, next) => {
   const docs = await Job.create(req.body);
-  res.status(200).json({
+  return res.status(200).json({
     message: "New job is posted successfully.",
     data: docs,
     success: true,
@@ -86,7 +87,7 @@ exports.jobInRadius = async (req, res, next) => {
   const data = await Job.find({
     location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   });
-  res.status(200).json({
+  return res.status(200).json({
     message: "Jobs fetched successfully",
     results: data.length,
     sucess: true,
@@ -108,9 +109,24 @@ exports.updateJob = async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  res.json({
+  return res.json({
     message: "Job updated successfully",
     success: true,
     data: jobs,
   });
 };
+
+exports.deleteJob = async (req, res, next) => {
+  let job = await Job.findById(req.params.id);
+  if (!job) {
+    return res.status(404).json({ 
+      message: "Job not found",
+      success: false,
+    });
+  }
+  job = await Job.findByIdAndDelete(req.params.id);
+  return res.status(200).json({
+    message: "Job deleted successfully",
+    success: true,
+  });
+}
