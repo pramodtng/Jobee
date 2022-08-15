@@ -45,10 +45,7 @@ exports.jobInRadius = async (req, res, next) => {
 exports.updateJob = async (req, res, next) => {
   let jobs = await Job.findById(req.params.id);
   if (!jobs) {
-    res.json({
-      message: "Job not found",
-      success: false,
-    });
+    return next(new ErrorHandlers("Job not found", 404));
   }
 
   jobs = await Job.findByIdAndUpdate(req.params.id, req.body, {
@@ -66,10 +63,8 @@ exports.updateJob = async (req, res, next) => {
 exports.deleteJob = async (req, res, next) => {
   let job = await Job.findById(req.params.id);
   if (!job) {
-    return res.status(404).json({
-      message: "Job not found",
-      success: false,
-    });
+    return next(new ErrorHandlers("Job not found", 404));
+
   }
   job = await Job.findByIdAndDelete(req.params.id);
   return res.status(200).json({
@@ -85,10 +80,7 @@ exports.getJobById = async (req, res, next) => {
   });
 
   if (!job || job.length === 0) {
-    return res.status(404).json({
-      message: "Job not found",
-      success: false,
-    });
+    return next(new ErrorHandlers('Job not found', 404));
   }
   return res.status(200).json({
     message: "Job fetched successfully",
@@ -115,7 +107,8 @@ exports.getStats = async (req, res, next) => {
   ]);
 
   if (stats.length === 0) {
-    return res.json({
+    // return next(new ErrorHandlers('No jobs found', 404));
+    return res.status(404).json({
       message: "No jobs found",
       success: false,
     });

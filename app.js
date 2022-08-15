@@ -2,7 +2,8 @@ const express = require("express");
 require("dotenv").config({ path: "./config/config.env" });
 const jobs = require("./routes/jobs");
 const DBConnection = require("./config/dbConnection");
-const errorHandlers = require("./middleware/errors");
+const errorMiddlewares = require("./middleware/errors");
+
 
 const app = express();
 
@@ -15,11 +16,8 @@ DBConnection();
 app.use("/", jobs);
 
 //Middelware for errors
-app.use(errorHandlers);
+app.use(errorMiddlewares);
 
-app.use("/", (req, res) => {
-  res.send("Hello World");
-});
 
 app.listen(PORT, (req, res) => {
   console.log(

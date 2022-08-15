@@ -1,4 +1,6 @@
-module.exports = (req, res, next) => {
+const errorHandlers = require("../utils/errorHandlers");
+
+const errorMiddleware = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
 
   if (process.env.NODE_ENV === "development") {
@@ -20,4 +22,4 @@ module.exports = (req, res, next) => {
   }
 };
 
-
+module.exports = errorMiddleware;
